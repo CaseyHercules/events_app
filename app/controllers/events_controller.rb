@@ -13,11 +13,10 @@ class EventsController < ApplicationController
     ### POST /events
     # Requires 
     def create
-        event = Event.new(event_params)
+        event = Event.new(name:params[:name],event_type:params[:event_type],data: data_params)
         if event.save
             render json: event, status: :created #201
         else
-            #render json: {error: 'Unable to create User, Missing:'+event.errors}, status: :unprocessable_entity #422
             render json: event.errors, status: :unprocessable_entity #422
         end
     end 
@@ -26,7 +25,7 @@ class EventsController < ApplicationController
 
     private
 
-    def event_params
-        params.require(:event)
+    def data_params
+        params.except(:name,:event_type,:controller,:action,:event).each{|key| "#{key}"}.to_h.to_a
     end
 end

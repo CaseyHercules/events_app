@@ -9,12 +9,13 @@ class EventsController < ApplicationController
         Event.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).distinct.pluck(:event_type).each do |eT|
             stats_json << {eT => Event.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day, event_type: eT).count}
         end
-        render json: {"todays_stats":stats_json}
+        render json: {"todays_stats":stats_json}, status: :ok #200
     end
 
 
     ### POST /events
-    # Requires 
+    # Runs data_params and render_post_output to orginize and give a useful responce
+    # Also Sends error if name or event_type is null or absent
     def create
         event = Event.new(name:params[:name],event_type:params[:event_type],data: data_params)
         if event.save
@@ -28,10 +29,15 @@ class EventsController < ApplicationController
 
     private
 
+    #Strips out all non-constant json keys
+    #Then places them into an array for storage within pg database
     def data_params
         params.except(:name,:event_type,:controller,:action,:event).each{|key| "#{key}"}.to_h.to_a
     end
 
+    #Instead of default json output
+    #This formats the json so that the extra data key values pairs arn't under an extra "data" json key
+    #But is on the same level as all of the other key value pairs.
     def render_post_output(event)
         responce_json = Hash.new
         responce_json[:id] = event.id

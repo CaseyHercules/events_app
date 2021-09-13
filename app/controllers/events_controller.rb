@@ -6,8 +6,8 @@ class EventsController < ApplicationController
     # EXAMPLE: { "todays_stats" :[{"click" : 34}, {"view": 54}]}
     def index
         stats_json = []
-        Event.distinct.pluck(:event_type).each do |eT|
-            stats_json << {eT => Event.count{|stat| stat.event_type == eT}}
+        Event.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).distinct.pluck(:event_type).each do |eT|
+            stats_json << {eT => Event.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day, event_type: eT).count}
         end
         render json: {"todays_stats":stats_json}
     end

@@ -1,24 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+API Endpoint for CareRev
 
-Things you may want to cover:
+Available endpoints:
 
-* Ruby version
+Add to Database
+POST: /events
 
-* System dependencies
+See Daily Stats
+GET: /events, /todays_stats, /stats
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

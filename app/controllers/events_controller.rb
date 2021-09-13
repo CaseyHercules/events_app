@@ -32,7 +32,7 @@ class EventsController < ApplicationController
     #Strips out all non-constant json keys
     #Then places them into an array for storage within pg database
     def data_params
-        params.except(:name,:event_type,:controller,:action,:event).each{|key| "#{key}"}.to_h.to_a
+        params[:event].except(:name,:event_type,:controller,:action,:event).each{|key| "#{key}"}.to_h.to_a
     end
 
     #Instead of default json output

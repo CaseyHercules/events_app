@@ -17,9 +17,9 @@ class EventsController < ApplicationController
     # Runs data_params and render_post_output to orginize and give a useful responce
     # Also Sends error if name or event_type is null or absent
     def create
-        event = Event.new(name:params[:name],event_type:params[:event_type],data: data_params)
+        event = Event.new(name:params[:event][:name],event_type:params[:event][:event_type],data: data_params)
         if event.save
-            render json: render_post_output(event), status: :created #201
+            render json: {"event":render_post_output(event)}, status: :created #201
         else
             render json: event.errors, status: :unprocessable_entity #422
         end
